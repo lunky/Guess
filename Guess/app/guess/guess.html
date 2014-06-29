@@ -9,11 +9,15 @@
                         <div class="widget-content text-center text-info">
                             <small>{{vm.guesser.description}}</small>
                         </div>
+
+                        <div>
+                            <button data-ng-click="vm.clear()">Clear</button>
+                        </div>
                         <div class="widget-content">
-                            Logged in : <br/>
+                            Logged in : <br />
                             <ul ng-repeat="user in vm.users">
-                                <li>{{user.handle}}</li>
-                            </ul> 
+                                <li>{{user.Name}} vote: {{user.Vote}} ready:{{user.ready}}</li>
+                            </ul>
                         </div>
                         <div class="widget-foot">
                             <div class="clearfix"></div>

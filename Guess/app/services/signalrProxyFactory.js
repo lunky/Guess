@@ -1,51 +1,6 @@
 ﻿'use strict';
 var proxyApp = angular.module("app.signalrProxyFactory", []);
 
-proxyApp.factory('signalRHubProxy', ['$rootScope', function ($rootScope) {
-    function signalRHubProxyFactory(serverUrl, hubName, startOptions) {
-        var connection = $.hubConnection();
-        var proxy = connection.createHubProxy(hubName);
-
-        return {
-            start: function () {
-                connection.start(startOptions).done(function () {
-                    console.log("Connection (factory) created to hub: " + hubName);
-                });
-            },
-            on: function (eventName, callback) {
-                proxy.on(eventName, function (result) {
-                    $rootScope.$apply(function () {
-                        if (callback) {
-                            callback(result);
-                        }
-                    });
-                });
-            },
-            off: function (eventName, callback) {
-                proxy.off(eventName, function (result) {
-                    $rootScope.$apply(function () {
-                        if (callback) {
-                            callback(result);
-                        }
-                    });
-                });
-            },
-            invoke: function (methodName, callback) {
-                proxy.invoke(methodName)
-                    .done(function (result) {
-                        $rootScope.$apply(function () {
-                            if (callback) {
-                                callback(result);
-                            }
-                        });
-                    });
-            },
-            connection: connection
-        };
-    };
-
-    return signalRHubProxyFactory;
-}]);
 
 
 // The same as a service (used as singleton)
@@ -58,6 +13,9 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
     //Getting the connection object
     connection = $.hubConnection();
 
+    //Creating proxy
+    proxy = connection.createHubProxy(hubName);
+
     // handle reconnection
     var reconnectCallbackDictionary = {};
     connection.reconnected(function () {
@@ -67,8 +25,6 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
         }
     });
 
-    //Creating proxy
-    proxy = connection.createHubProxy(hubName);
 
     var start = function () {
         var promise = connection.start();
@@ -89,8 +45,8 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
             });
         });
         // re-arm connection
-        stop();
-        start();
+    //    stop();
+    //    start();
     };
     var off = function (eventName, callback) {
         proxy.off(eventName, function (result) {
@@ -102,14 +58,15 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
         });
     };
     var invoke = function (methodName, callback) {
-        proxy.invoke(methodName)
-            .done(function (result) {
+        var promise = proxy.invoke(methodName);
+        promise.done(function (result) {
                 $rootScope.$apply(function () {
                     if (callback) {
                         callback(result);
                     }
                 });
-            });
+        });
+        return $q.when(promise);
     };
 
 

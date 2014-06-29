@@ -18,10 +18,23 @@
         vm.people = [];
         vm.title = 'Dashboard';
 
+        vm.clear = function() {
+            signalRSvc.invoke("Clear");
+        };
+
+        signalRSvc.on('Guess', function (name, guess) {
+            console.log("guess " + name + ' : ' + guess);
+        });
+
+        signalRSvc.on('GetUsers', function() {
+            console.log("GetUsers");
+            getLoggedInUsers();
+        });
+
         activate();
 
         function activate() {
-            var promises = [signalRSvc.start(), getLoggedInUsers()];
+            var promises = [signalRSvc.start()];
             common.activateController(promises, controllerId)
                 .then(function() {
                     log('Activated Dashboard View');
@@ -30,20 +43,8 @@
 
         function getLoggedInUsers() {
             signalRSvc.invoke('GetUsers', function (data) {
-                log.console(data.length());
+                console.log("users: " + data.length);
                 vm.users = data;
-            });
-        }
-
-        function getMessageCount() {
-            return datacontext.getMessageCount().then(function (data) {
-                return vm.messageCount = data;
-            });
-        }
-
-        function getPeople() {
-            return datacontext.getPeople().then(function (data) {
-                return vm.people = data;
             });
         }
     }
