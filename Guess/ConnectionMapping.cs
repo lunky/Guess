@@ -5,7 +5,7 @@ using System.Web.UI;
 
 namespace Guess
 {
-	public class ConnectionMapping<T> where T:IResetable
+	public class ConnectionMapping<T> where T:IGuessConnection
 	{
 		private readonly Dictionary<string, T> _connections =
 			new Dictionary<string, T>();
@@ -49,10 +49,18 @@ namespace Guess
 				conn.Reset();
 			}
 		}
-	}
 
-	public interface IResetable
-	{
-		void Reset();
+		public void SetVote(string key, int guess)
+		{
+			lock (_connections)
+			{
+				if (_connections.ContainsKey(key))
+				{
+					var conn = _connections[key];
+					conn.SetVote(guess);
+					_connections[key] = conn;
+				}
+			}
+		}
 	}
 }

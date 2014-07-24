@@ -1,4 +1,4 @@
-﻿<section id="dashboard-view" class="mainbar" data-ng-controller="dashboard as vm">
+﻿<section id="dashboard-view" class="mainbar" data-ng-controller="dashboardCtrl as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
@@ -16,7 +16,11 @@
                         <div class="widget-content">
                             Logged in : <br />
                             <ul ng-repeat="user in vm.users">
-                                <li>{{user.Name}} vote: {{user.Vote}} ready:{{user.ready}}</li>
+                                <li><div class="guessName">{{user.Name}}</div>
+                                    <div class="guessVote" data-ng-show="user.Ready"> {{user.Vote}}</div> 
+                                    <div class="guessReady" data-ng-show="user.Ready">User is ready</div>
+                                    <div class="guessNotReady" data-ng-show="user.Name==vm.connectionId"><input integer data-ng-model="user.Vote"/><button data-ng-click="vm.castVote(user)">register guess</button></div>
+                                </li>
                             </ul>
                         </div>
                         <div class="widget-foot">

@@ -103,6 +103,7 @@
     <Content Include="app\config.route.js" />
     <Content Include="app\guess\guess.html" />
     <Content Include="app\guess\guess.js" />
+    <Content Include="app\helloworld.js" />
     <Content Include="app\layout\shell.html" />
     <Content Include="app\layout\shell.js" />
     <Content Include="app\layout\sidebar.html" />
@@ -126,6 +127,7 @@
     <Content Include="Content\styles.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="css\jasmine.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Content\toastr.scss" />
@@ -137,6 +139,12 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="index.html" />
+    <Content Include="lib\boot.js" />
+    <Content Include="lib\console.js" />
+    <Content Include="lib\jasmine-html.js" />
+    <Content Include="lib\jasmine.css" />
+    <Content Include="lib\jasmine.js" />
+    <Content Include="lib\jasmine_favicon.png" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-route.js" />
@@ -153,6 +161,8 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jasmine-html.js" />
+    <Content Include="Scripts\jasmine.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.0.js" />
@@ -167,13 +177,18 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.js" />
     <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
+    <Content Include="SpecRunner.html" />
+    <Content Include="spec\GuessControllerSpec.js" />
+    <Content Include="spec\helloWorldSpec.js" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
     <Content Include="Scripts\toastr.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionMapping.cs" />
+    <Compile Include="GuessConnection.cs" />
     <Compile Include="GuessHub.cs" />
+    <Compile Include="IGuessConnection.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalrStartup.cs" />

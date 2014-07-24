@@ -215,6 +215,9 @@ small {
 .navbar-logo img {
     height: 20px;
 }
+.navbar-logo {
+	color: #ffffff;
+}
 
 .today-datas li {
     padding: 20px 14px;

@@ -1,6 +1,6 @@
 ﻿(function() {
     'use strict';
-    var controllerId = 'dashboard';
+    var controllerId = 'dashboardCtrl';
     angular.module('app').controller(controllerId, ['common', 'datacontext', 'signalRSvc', dashboard]);
 
     function dashboard(common, datacontext, signalRSvc) {
@@ -33,12 +33,20 @@
 
         activate();
 
+        vm.castVote = function (user) {
+            vm = this;
+            console.log("casting vote " + user.Vote);
+            signalRSvc.invoke("Guess", null,  user.Vote);
+        }
+
         function activate() {
             var promises = [signalRSvc.start()];
             common.activateController(promises, controllerId)
                 .then(function() {
                     log('Activated Dashboard View');
-                });
+                console.log("connectionId=" + signalRSvc.connection.id);
+                vm.connectionId = signalRSvc.connection.id;
+            });
         }
 
         function getLoggedInUsers() {

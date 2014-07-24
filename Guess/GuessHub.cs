@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Guess.Annotations;
 using Microsoft.AspNet.SignalR;
@@ -47,10 +48,11 @@ namespace Guess
 		}
 
 		[UsedImplicitly]
-		public void Guess(string name, int guess)
+		public void Guess(int guess)
 		{
-			Clients.All.broadcastMessage(name, guess);
-			Debug.WriteLine("Guess " + name + " " + guess);
+			Debug.WriteLine("Guess " + UserName + " " + guess);
+			Connections.SetVote(UserName, guess);
+			Clients.All.GetUsers();
 		}
 
 		[UsedImplicitly]
@@ -65,30 +67,21 @@ namespace Guess
 		{
 			Debug.WriteLine("GetUsers");
 			var connections = Connections.GetConnections();
+			HideOrShowGuesses(connections);			
 			return connections;
-		} 
-	}
-
-	public class GuessConnection:IResetable
-	{
-		public GuessConnection(string name, string connectionId)
-		{
-			Name = name;
-			ConnectionId = connectionId;
-			Reset();
-		}
-		public string Name { get; set; }
-		public string ConnectionId { get; set; }
-		public int Guess { get; set; }
-
-		public bool Ready
-		{
-			get { return Guess > -1; }
 		}
 
-		public void Reset()
+		private void HideOrShowGuesses(IEnumerable<GuessConnection> connections)
 		{
-			Guess = -1;
+			return;
+			bool everyBodyReady = connections.All(c=>c.Ready);
+			if (!everyBodyReady) // shroud guess;
+			{
+				foreach (var conn in connections)
+				{
+					conn.SetVote(-1);
+				}
+			}
 		}
 	}
 }

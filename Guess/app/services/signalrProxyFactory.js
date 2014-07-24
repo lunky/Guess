@@ -30,6 +30,7 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
         var promise = connection.start();
         promise.done(function () {
             console.log("Connection (svc) created to " + hubName);
+            this.connectionId = connection.id;
         });
         return $q.when(promise);
     };
@@ -57,8 +58,12 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
             });
         });
     };
+
     var invoke = function (methodName, callback) {
-        var promise = proxy.invoke(methodName);
+        var args = $.makeArray(arguments).slice(2);
+        args.unshift(methodName);
+        var promise = proxy.invoke.apply(proxy, args);
+
         promise.done(function (result) {
                 $rootScope.$apply(function () {
                     if (callback) {
@@ -87,5 +92,6 @@ proxyApp.service('signalRSvc', function ($, $q, $rootScope) {
         off: off,
         invoke: invoke,
         onReconnect: onReconnect,
+        connection: connection
     };
 });
